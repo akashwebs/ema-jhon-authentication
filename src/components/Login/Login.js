@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useAuthState, useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../firebase/firebase.init';
 import './Login.css'
 
@@ -8,12 +8,19 @@ const Login = () => {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const navigate = useNavigate()
+    const location = useLocation()
     const [
         signInWithEmailAndPassword,
         user,
         loading,
         error,
     ] = useSignInWithEmailAndPassword(auth);
+    
+    const from = location.state?.from?.pathname || "/";
+   
+
+   
+  
 
     const hanleEmail = (event) => {
         setEmail(event.target.value)
@@ -26,9 +33,11 @@ const Login = () => {
         signInWithEmailAndPassword(email, password);
 
     }
+    
     if (user) {
-        navigate('/shop')
+        navigate(from, { replace: true })
     }
+
     return (
         <div className='from-container'>
             <div>
